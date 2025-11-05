@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Умный организатор конспектов</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Шапка (Header) -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">📚 УмКонспект</div>
+        </div>
+        <nav class="header-nav">
+            <a href="#" class="nav-link" id="aboutLink">О проекте</a>
+            <a href="#" class="nav-link" id="helpLink">Помощь / FAQ</a>
+        </nav>
+        <div class="header-right">
+            <div class="user-menu">
+                <button class="user-btn" id="userBtn">
+                    <i class="fas fa-user"></i>
+                    Пользователь ▼
+                </button>
+                <div class="dropdown-content" id="dropdownContent">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <span class="user-name">Иван Иванов</span>
+                    </div>
+                    <button class="dropdown-item" id="settingsBtn">
+                        <i class="fas fa-cog"></i>Настройки
+                    </button>
+                    <button class="dropdown-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>Выйти
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Боковая панель (Sidebar) -->
+        <aside class="sidebar">
+            <div class="sidebar-main-item" id="mainLink">
+                <i class="fas fa-home"></i>
+                Главное
+            </div>
+            <h2 class="sidebar-title">
+                <i class="fas fa-folder"></i>
+                Мои папки
+            </h2>
+            <ul class="folders-list" id="foldersList">
+                <!-- Папки будут добавляться здесь через JS -->
+            </ul>
+            <button class="btn-new-folder" id="newFolderBtn">
+                <i class="fas fa-plus"></i>
+                Новая папка
+            </button>
+        </aside>
+
+        <!-- Рабочая область (Main Content Area) -->
+        <main class="main-content">
+            <!-- Состояние 1: Домашняя страница -->
+            <section class="home-view active" id="homeView">
+                <div class="welcome-section">
+                    <div class="hero">
+                        <h1>Добро пожаловать в Умный организатор конспектов!</h1>
+                        <p class="subtitle">Экономьте время на конспектирование с помощью искусственного интеллекта</p>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>AI-обработка</h3>
+                            <p>Автоматически создавайте структурированные конспекты из объемных текстов</p>
+                            <div class="feature-steps">
+                                <div class="step">1. Введите текст</div>
+                                <div class="step">2. Нажмите "Сгенерировать"</div>
+                                <div class="step">3. Получите готовый конспект!</div>
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-folder-tree"></i>
+                            </div>
+                            <h3>Умная организация</h3>
+                            <p>Сортируйте конспекты по папкам и легко находите нужные материалы</p>
+                            <div class="feature-steps">
+                                <div class="step">• Создавайте тематические папки</div>
+                                <div class="step">• Быстрый доступ к конспектам</div>
+                                <div class="step">• Удобный просмотр содержимого</div>
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <h3>Редактирование</h3>
+                            <p>Дорабатывайте конспекты с помощью удобного редактора</p>
+                            <div class="feature-steps">
+                                <div class="step">• Режим просмотра конспекта</div>
+                                <div class="step">• Форматирование текста</div>
+                                <div class="step">• Добавление новой информации через AI</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalFolders">0</div>
+                            <div class="stat-label">Всего папок</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalNotes">0</div>
+                            <div class="stat-label">Всего конспектов</div>
+                        </div>
+                    </div>
+
+                    <div class="news-section">
+                        <h2>Последние обновления</h2>
+                        <div class="news-card">
+                            <div class="news-date">15.01.2024</div>
+                            <h3>Запуск новой версии</h3>
+                            <p>Добавлен умный AI для генерации конспектов и улучшен интерфейс редактора. Теперь вы можете просматривать конспекты в отдельном режиме и добавлять новую информацию через AI-редактор!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Состояние 2: Просмотр конспектов в папке -->
+            <section class="folder-content-view" id="folderContentView">
+                <div class="folder-header">
+                    <h2 id="currentFolderTitle">Папка: Название</h2>
+                    <button class="btn-new-note" id="newNoteBtn">
+                        <i class="fas fa-plus"></i>
+                        Новый конспект
+                    </button>
+                </div>
+
+                <div class="folder-info">
+                    <p>Количество конспектов: <span id="notesCount">0</span></p>
+                    <p class="help-text">Нажмите на конспект для просмотра или создайте новый</p>
+                </div>
+
+                <div class="notes-container" id="notesContainer">
+                    <!-- Конспекты будут отображаться здесь -->
+                </div>
+
+                <div class="empty-folder" id="emptyFolder">
+                    <div class="empty-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>В этой папке пока нет конспектов</h3>
+                    <p>Создайте первый конспект, чтобы начать работу</p>
+                    <button class="btn-create-first" id="createFirstNoteBtn">
+                        <i class="fas fa-plus"></i>
+                        Создать конспект
+                    </button>
+                </div>
+            </section>
+
+            <!-- Состояние 3: Просмотр конспекта -->
+            <section class="note-view" id="noteView">
+                <div class="note-view-header">
+                    <button class="btn-back" id="backFromNoteView">
+                        <i class="fas fa-arrow-left"></i>
+                        Назад к папке
+                    </button>
+                    <div class="note-title-section">
+                        <h2 id="viewNoteTitle">Название конспекта</h2>
+                        <button class="btn-edit-title" id="editTitleBtn">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <div class="note-view-actions">
+                        <button class="btn-edit-ai" id="editAiBtn">
+                            <i class="fas fa-robot"></i>
+                            Редактировать с AI
+                        </button>
+                        <button class="btn-download-note" id="downloadViewNoteBtn">
+                            <i class="fas fa-download"></i>
+                            Скачать
+                        </button>
+                    </div>
+                </div>
+
+                <div class="note-content-view">
+                    <div class="formatting-toolbar">
+                        <button class="format-btn" data-command="bold" title="Жирный">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="format-btn" data-command="italic" title="Курсив">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="format-btn" data-command="underline" title="Подчеркивание">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <button class="format-btn" data-command="insertUnorderedList" title="Маркированный список">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button class="format-btn" data-command="insertOrderedList" title="Нумерованный список">
+                            <i class="fas fa-list-ol"></i>
+                        </button>
+                        
+                        <!-- Новые кнопки отмены/сохранения -->
+                        <div class="toolbar-actions">
+                            <button class="btn-undo" id="undoBtn" title="Отменить">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button class="btn-redo" id="redoBtn" title="Вернуть">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="btn-save-view" id="saveViewNoteBtn" title="Сохранить">
+                                <i class="fas fa-save"></i> Сохранить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-text-content" id="noteTextContent" contenteditable="true">
+                        <!-- Содержимое конспекта будет здесь -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Состояние 4: Редактор конспекта с AI -->
+            <section class="note-editor-view" id="noteEditorView">
+                <div class="editor-header">
+                    <button class="btn-back" id="backToNoteView">
+                        <i class="fas fa-arrow-left"></i>
+                        Назад к просмотру
+                    </button>
+                    <h2 id="editorTitle">Редактор с AI</h2>
+                    <div class="editor-actions">
+                        <button class="btn-save-note" id="saveNoteBtn">
+                            <i class="fas fa-save"></i>
+                            Сохранить
+                        </button>
+                    </div>
+                </div>
+
+                <div class="note-editor">
+                    <div class="editor-section source-section">
+                        <div class="section-header">
+                            <h3>Исходный материал</h3>
+                            <div class="upload-section">
+                                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                                <button class="btn-upload" id="uploadBtn">
+                                    <i class="fas fa-paperclip"></i>
+                                    Загрузить изображение
+                                </button>
+                            </div>
+                        </div>
+                        <textarea class="source-material" id="sourceMaterial" placeholder="Введите ваш текст или загрузите изображение..."></textarea>
+                        <div class="generation-controls">
+                            <button class="btn-generate" id="generateBtn">
+                                <i class="fas fa-bolt"></i>
+                                Сгенерировать конспект
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="editor-section result-section">
+                        <div class="section-header">
+                            <h3>Умный конспект</h3>
+                            <button class="btn-regenerate" id="regenerateBtn">
+                                <i class="fas fa-redo"></i>
+                                Сгенерировать заново
+                            </button>
+                        </div>
+                        <div class="smart-notes-editable" id="smartNotesEditable" contenteditable="true">
+                            <!-- Сюда будет вставляться сгенерированный конспект -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Подвал (Footer) -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Политика конфиденциальности</a>
+                <a href="#">Условия использования</a>
+            </div>
+            <div class="footer-contact">
+                <span>Контакты: info@smartnotes.ru</span>
+            </div>
+            <div class="footer-copyright">
+                © 2024 Умный организатор конспектов
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="folderModal">
+        <div class="modal-content">
+            <h3>Создать новую папку</h3>
+            <input type="text" id="folderNameInput" placeholder="Введите название папки">
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelFolder">Отмена</button>
+                <button class="btn-confirm" id="confirmFolder">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <h3>Создать новый конспект</h3>
+            <input type="text" id="noteNameInput" placeholder="Введите название конспекта">
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelNote">Отмена</button>
+                <button class="btn-confirm" id="confirmNote">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="titleModal">
+        <div class="modal-content">
+            <h3>Изменить название конспекта</h3>
+            <input type="text" id="titleInput" placeholder="Введите новое название">
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelTitle">Отмена</button>
+                <button class="btn-confirm" id="confirmTitle">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h3>Настройки профиля</h3>
+            <div class="settings-form">
+                <div class="avatar-section">
+                    <div class="avatar-preview">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <button class="btn-change-avatar" id="changeAvatarBtn">
+                        <i class="fas fa-camera"></i>
+                        Сменить аватар
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="userName">Имя пользователя:</label>
+                    <input type="text" id="userName" value="Иван Иванов">
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email:</label>
+                    <input type="email" id="userEmail" value="ivan@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="userPassword">Новый пароль:</label>
+                    <input type="password" id="userPassword" placeholder="Введите новый пароль">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Подтвердите пароль:</label>
+                    <input type="password" id="confirmPassword" placeholder="Подтвердите новый пароль">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelSettings">Отмена</button>
+                <button class="btn-confirm" id="saveSettings">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <h3>О проекте</h3>
+            <div class="modal-text">
+                <p><strong>Умный организатор конспектов</strong> - это инновационное веб-приложение, созданное для помощи студентам, исследователям и всем, кто работает с большими объемами текстовой информации.</p>
+                
+                <h4>Основные возможности:</h4>
+                <ul>
+                    <li>Автоматическая генерация структурированных конспектов с помощью AI</li>
+                    <li>Умное распознавание текста с изображений</li>
+                    <li>Удобная организация конспектов по папкам</li>
+                    <li>Режим просмотра с редактированием конспектов</li>
+                    <li>Добавление новой информации через AI-редактор</li>
+                    <li>Экспорт конспектов в текстовые файлы</li>
+                </ul>
+
+                <h4>Наша миссия:</h4>
+                <p>Сделать процесс конспектирования эффективным и приятным, экономя ваше время для более важных задач.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-confirm" id="closeAbout">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal help-modal" id="helpModal">
+        <div class="modal-content">
+            <h3>Помощь / FAQ</h3>
+            <div class="modal-text">
+                <div class="faq-item">
+                    <h4>Как создать новый конспект?</h4>
+                    <p>Выберите папку в боковом меню, нажмите "Новый конспект", введите название и начните работу в AI-редакторе.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как работает режим просмотра конспекта?</h4>
+                    <p>В режиме просмотра вы можете читать конспект, редактировать его напрямую и добавлять новую информацию через кнопку "Редактировать с AI".</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Можно ли загружать изображения с текстом?</h4>
+                    <p>Да! Нажмите "Загрузить изображение" в AI-редакторе. Система автоматически распознает текст.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как организовать конспекты?</h4>
+                    <p>Создавайте папки для разных тем через кнопку "Новая папка". Все конспекты автоматически сохраняются в выбранной папке.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как скачать конспект?</h4>
+                    <p>В режиме просмотра конспекта нажмите кнопку "Скачать" в верхней панели инструментов.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как удалить папку?</h4>
+                    <p>Наведите курсор на папку в боковой панели и нажмите на значок корзины. Внимание: все конспекты в папке также будут удалены!</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как работает автосохранение?</h4>
+                    <p>При редактировании конспекта в режиме просмотра изменения автоматически сохраняются каждые 2 секунды.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Можно ли отменить изменения?</h4>
+                    <p>Да! Используйте кнопки "Отменить" и "Вернуть" в панели инструментов режима просмотра.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Как изменить название конспекта?</h4>
+                    <p>В режиме просмотра конспекта нажмите на значок карандаша рядом с названием.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h4>Что делать, если AI сгенерировал неподходящий конспект?</h4>
+                    <p>Вы можете нажать "Сгенерировать заново" для получения нового варианта или отредактировать конспект вручную.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-confirm" id="closeHelp">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для удаления папки -->
+    <div class="modal" id="deleteFolderModal">
+        <div class="modal-content">
+            <h3>Удалить папку</h3>
+            <div class="modal-text">
+                <p>Вы уверены, что хотите удалить папку "<span id="folderToDeleteName"></span>"?</p>
+                <p class="help-text" style="color: var(--error-color); margin-top: 1rem;">
+                    ⚠️ Внимание: Все конспекты в этой папке также будут удалены!
+                </p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelDeleteFolder">Отмена</button>
+                <button class="btn-confirm" id="confirmDeleteFolder" style="background: var(--error-color);">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
