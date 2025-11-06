@@ -1,8 +1,0 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2-binary
-passlib[argon2]
-python-jose[cryptography]
-python-dotenv
-regex>=2023.10.3

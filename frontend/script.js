@@ -41,6 +41,35 @@ let state = {
     }
 };
 
+// 
+function loadUserData() {
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    if (currentUser) {
+        state.folders = currentUser.folders || state.folders;
+        state.user = {
+            name: currentUser.name,
+            email: currentUser.email,
+            avatar: currentUser.avatar || 'default'
+        };
+        
+        // Обновляем отображение имени пользователя
+        const userNameElement = document.querySelector('.user-name');
+        if (userNameElement) {
+            userNameElement.textContent = currentUser.name;
+        }
+    }
+}
+
+// Вызовите эту функцию в init()
+function init() {
+    loadUserData();
+    initializeElements();
+    renderFolders();
+    updateStats();
+    setupEventListeners();
+    setupFormattingToolbar();
+}
+
 // Элементы DOM
 let elements = {};
 

@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <script>
+// Проверка авторизации
+        document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = sessionStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'auth.html';
+        }
+    });
+    </script>
+    <div id="app" style="display: none;"> </div>
+    
     <!-- Шапка (Header) -->
     <header class="header">
         <div class="header-left">
