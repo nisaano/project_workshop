@@ -93,6 +93,63 @@ body {
     transform: translateY(-2px);
 }
 
+/* Начало новых стилей */
+.loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    display: none;
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    font-size: 14px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.key-terms-list {
+    list-style: none;
+    padding: 0;
+}
+
+.key-terms-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.term {
+    font-weight: bold;
+    color: #2c5aa0;
+}
+
+.term-frequency {
+    color: #666;
+    font-size: 0.9em;
+    margin-left: 5px;
+}
+/* Конец новых стилей */
+
 .dropdown-content {
     display: none;
     position: absolute;
