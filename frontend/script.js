@@ -681,6 +681,61 @@ function generateSmartNotes() {
     }
 }
 
+// Новая функция для AI-генерации конспекта
+async function generateSmartNotesAI() {
+    const sourceText = elements.sourceMaterial ? elements.sourceMaterial.value.trim() : '';
+    
+    if (!sourceText) {
+        alert('Пожалуйста, введите текст для обработки');
+        return;
+    }
+    
+    // Показываем индикатор загрузки
+    showLoadingIndicator();
+    
+    try {
+        const result = await processText(sourceText, 'enhance');
+        
+        if (result.success) {
+            if (elements.smartNotesEditable) {
+                elements.smartNotesEditable.innerHTML = `
+                    <div class="note-content">
+                        <div class="note-section">
+                            <h4>Обработанный конспект</h4>
+                            <div class="processed-text">${result.processed_text}</div>
+                        </div>
+                        ${result.key_terms && result.key_terms.length > 0 ? `
+                        <div class="note-section">
+                            <h4>Ключевые термины</h4>
+                            <ul class="key-terms-list">
+                                ${result.key_terms.map(term => 
+                                    `<li><span class="term">${term.term || term}</span> 
+                                     ${term.frequency ? `<span class="term-frequency">(${term.frequency})</span>` : ''}
+                                    </li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+        } else {
+            throw new Error(result.error || 'Неизвестная ошибка обработки');
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        // Если AI обработка не сработала, используем существующую mock-генерацию
+        const smartNotes = generateMockSmartNotes(sourceText);
+        if (elements.smartNotesEditable) {
+            elements.smartNotesEditable.innerHTML = smartNotes;
+        }
+        alert('AI обработка временно недоступна. Используется авто-генерация конспекта.');
+    } finally {
+        hideLoadingIndicator();
+    }
+}
+
 // Генерация mock-умного конспекта
 function generateMockSmartNotes(text) {
     const words = text.split(' ').slice(0, 30).join(' ');
@@ -726,6 +781,60 @@ function generateMockSmartNotes(text) {
             </div>
         </div>
     `;
+}
+
+// Функция для обработки изображения через AI
+async function processImage(file, processingType = 'enhance') {
+    try {
+        const token = localStorage.getItem('access_token');
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('processing_type', processingType);
+
+        const response = await fetch('/ai/process-image', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка обработки изображения');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+// Функция для обработки изображения
+async function processImage(file, processingType = 'enhance') {
+    try {
+        const token = localStorage.getItem('access_token');
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('processing_type', processingType);
+
+        const response = await fetch('/ai/process-image', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка обработки изображения');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
 }
 
 // Сохранение конспекта из редактора AI
@@ -912,6 +1021,59 @@ function handleImageUpload(event) {
     }
 }
 
+// Новая функция для AI-обработки изображений
+async function handleImageUploadAI(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Проверяем тип файла
+        if (!file.type.match('image.*')) {
+            alert('Пожалуйста, выберите файл изображения');
+            return;
+        }
+        
+        showLoadingIndicator();
+        
+        try {
+            const result = await processImage(file, 'enhance');
+            
+            if (result.success) {
+                if (elements.sourceMaterial) {
+                    // Вставляем распознанный текст в поле исходного материала
+                    elements.sourceMaterial.value = result.original_text || result.ocr_raw_text || 'Текст не распознан';
+                }
+                
+                // Показываем уведомление об успешной обработке
+                showSuccessModal(`Изображение обработано! Уверенность распознавания: ${(result.ocr_confidence * 100).toFixed(1)}%`);
+                
+                // Автоматически генерируем умный конспект из распознанного текста
+                if (result.processed_text && elements.smartNotesEditable) {
+                    elements.smartNotesEditable.innerHTML = `
+                        <div class="note-content">
+                            <div class="note-section">
+                                <h4>Обработанный конспект</h4>
+                                <div class="processed-text">${result.processed_text}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                throw new Error(result.error || 'Ошибка распознавания изображения');
+            }
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ошибка при обработке изображения: ' + error.message);
+            
+            // Используем существующую заглушку
+            if (elements.sourceMaterial) {
+                elements.sourceMaterial.value = `[Текст, распознанный из изображения "${file.name}"]\n\nЗдесь будет автоматически распознанный текст с вашего изображения.`;
+            }
+        } finally {
+            hideLoadingIndicator();
+        }
+    }
+}
+
 // Модальные окна навигации
 function showAboutModal() {
     if (elements.aboutModal) elements.aboutModal.style.display = 'block';
@@ -999,6 +1161,29 @@ function logout() {
         alert('Выход выполнен');
         if (elements.dropdownContent) elements.dropdownContent.classList.remove('show');
         showHomeView();
+    }
+}
+
+// Функции для индикатора загрузки
+function showLoadingIndicator() {
+    let loader = document.getElementById('loadingIndicator');
+    if (!loader) {
+        loader = document.createElement('div');
+        loader.id = 'loadingIndicator';
+        loader.className = 'loading-indicator';
+        loader.innerHTML = `
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Обработка AI...</div>
+        `;
+        document.body.appendChild(loader);
+    }
+    loader.style.display = 'flex';
+}
+
+function hideLoadingIndicator() {
+    const loader = document.getElementById('loadingIndicator');
+    if (loader) {
+        loader.style.display = 'none';
     }
 }
 
