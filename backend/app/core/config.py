@@ -21,6 +21,16 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     LOG_LEVEL: str = "INFO"
 
+    # Новые настройки OpenRouter
+    OPENROUTER_API_KEY: str = "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"
+    OPENROUTER_MODEL: str = "deepseek/deepseek-chat"
+    OPENROUTER_OCR_MODEL: str = "google/gemini-flash-1.5"
+
+    # Настройки обработки
+    USE_OPENROUTER: bool = True
+    USE_ML_ENHANCER: bool = True
+    USE_DIRECT_OCR_ENHANCEMENT: bool = False
+
     class Config:
         env_file = f"{BASE_DIR}/.env"
         env_file_encoding = "utf-8"
