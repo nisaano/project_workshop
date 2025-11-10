@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.migrations.base import Base  #
+ai_requests = relationship("AIRequest", back_populates="user")
 
 class User(Base):
     __tablename__ = "users"
@@ -18,6 +19,9 @@ class User(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     notes = relationship("Note", back_populates="owner")
+
+    # Новое:
+    ai_requests = relationship("AIRequest", back_populates="user")
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}', email='{self.email}')>"
