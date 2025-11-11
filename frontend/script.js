@@ -681,7 +681,7 @@ function generateSmartNotes() {
     }
 }
 
-// Новая функция для AI-генерации конспекта
+// AI-генерация конспекта
 async function generateSmartNotesAI() {
     const sourceText = elements.sourceMaterial ? elements.sourceMaterial.value.trim() : '';
     
@@ -690,49 +690,56 @@ async function generateSmartNotesAI() {
         return;
     }
     
-    // Показываем индикатор загрузки
-    showLoadingIndicator();
-    
     try {
+        // Просто показываем alert вместо красивого индикатора
+        alert('Обработка AI... Пожалуйста, подождите.');
+        
         const result = await processText(sourceText, 'enhance');
         
-        if (result.success) {
-            if (elements.smartNotesEditable) {
-                elements.smartNotesEditable.innerHTML = `
-                    <div class="note-content">
-                        <div class="note-section">
-                            <h4>Обработанный конспект</h4>
-                            <div class="processed-text">${result.processed_text}</div>
-                        </div>
-                        ${result.key_terms && result.key_terms.length > 0 ? `
-                        <div class="note-section">
-                            <h4>Ключевые термины</h4>
-                            <ul class="key-terms-list">
-                                ${result.key_terms.map(term => 
-                                    `<li><span class="term">${term.term || term}</span> 
-                                     ${term.frequency ? `<span class="term-frequency">(${term.frequency})</span>` : ''}
-                                    </li>`
-                                ).join('')}
-                            </ul>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-            }
+        if (result.success && elements.smartNotesEditable) {
+            elements.smartNotesEditable.innerHTML = result.processed_text;
         } else {
-            throw new Error(result.error || 'Неизвестная ошибка обработки');
+            throw new Error(result.error || 'Ошибка обработки');
         }
         
     } catch (error) {
         console.error('Error:', error);
-        // Если AI обработка не сработала, используем существующую mock-генерацию
+        // Используем существующую mock-генерацию как запасной вариант
         const smartNotes = generateMockSmartNotes(sourceText);
         if (elements.smartNotesEditable) {
             elements.smartNotesEditable.innerHTML = smartNotes;
         }
         alert('AI обработка временно недоступна. Используется авто-генерация конспекта.');
-    } finally {
-        hideLoadingIndicator();
+    }
+}
+
+// AI-обработка изображений
+async function handleImageUploadAI(event) {
+    const file = event.target.files[0];
+    if (file) {
+        if (!file.type.match('image.*')) {
+            alert('Пожалуйста, выберите файл изображения');
+            return;
+        }
+        
+        try {
+            alert('Обработка изображения AI... Пожалуйста, подождите.');
+            
+            const result = await processImage(file, 'enhance');
+            
+            if (result.success) {
+                if (elements.sourceMaterial) {
+                    elements.sourceMaterial.value = result.original_text || result.ocr_raw_text || 'Текст не распознан';
+                }
+                alert(`Изображение обработано! Уверенность распознавания: ${(result.ocr_confidence * 100).toFixed(1)}%`);
+            } else {
+                throw new Error(result.error || 'Ошибка распознавания');
+            }
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Ошибка при обработке изображения: ' + error.message);
+        }
     }
 }
 
@@ -783,15 +790,14 @@ function generateMockSmartNotes(text) {
     `;
 }
 
-// Функция для обработки изображения через AI
-async function processImage(file, processingType = 'enhance') {
+async function processText(text, processingType = 'enhance') {
     try {
         const token = localStorage.getItem('access_token');
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('text', text);
         formData.append('processing_type', processingType);
 
-        const response = await fetch('/ai/process-image', {
+        const response = await fetch('/ai/process-text', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -800,7 +806,7 @@ async function processImage(file, processingType = 'enhance') {
         });
 
         if (!response.ok) {
-            throw new Error('Ошибка обработки изображения');
+            throw new Error('Ошибка обработки текста');
         }
 
         return await response.json();
