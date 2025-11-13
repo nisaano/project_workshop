@@ -790,6 +790,7 @@ function generateMockSmartNotes(text) {
     `;
 }
 
+// Функция для обработки текста
 async function processText(text, processingType = 'enhance') {
     try {
         const token = localStorage.getItem('access_token');
