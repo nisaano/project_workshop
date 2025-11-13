@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.db.migrations.base import Base  #
-ai_requests = relationship("AIRequest", back_populates="user")
 
 class User(Base):
     __tablename__ = "users"
