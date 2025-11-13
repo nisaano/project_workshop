@@ -1171,28 +1171,5 @@ function logout() {
     }
 }
 
-// Функции для индикатора загрузки
-function showLoadingIndicator() {
-    let loader = document.getElementById('loadingIndicator');
-    if (!loader) {
-        loader = document.createElement('div');
-        loader.id = 'loadingIndicator';
-        loader.className = 'loading-indicator';
-        loader.innerHTML = `
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Обработка AI...</div>
-        `;
-        document.body.appendChild(loader);
-    }
-    loader.style.display = 'flex';
-}
-
-function hideLoadingIndicator() {
-    const loader = document.getElementById('loadingIndicator');
-    if (loader) {
-        loader.style.display = 'none';
-    }
-}
-
 // Запуск приложения
 document.addEventListener('DOMContentLoaded', init);
