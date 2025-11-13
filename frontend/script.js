@@ -207,11 +207,11 @@ function setupEventListeners() {
     if (elements.saveNoteBtn) elements.saveNoteBtn.addEventListener('click', saveNote);
     if (elements.saveViewNoteBtn) elements.saveViewNoteBtn.addEventListener('click', saveNoteFromView);
     
-    // Генерация конспекта
-    if (elements.generateBtn) elements.generateBtn.addEventListener('click', generateSmartNotes);
-    if (elements.regenerateBtn) elements.regenerateBtn.addEventListener('click', generateSmartNotes);
+    // Генерация конспекта - Изменено
+    if (elements.generateBtn) elements.generateBtn.addEventListener('click', generateSmartNotesAI);
+    if (elements.regenerateBtn) elements.regenerateBtn.addEventListener('click', generateSmartNotesAI);
     
-    // Загрузка изображений
+    // Загрузка изображений - Изменено
     if (elements.uploadBtn) {
         elements.uploadBtn.addEventListener('click', () => {
             const imageUpload = document.getElementById('imageUpload');
@@ -220,7 +220,7 @@ function setupEventListeners() {
     }
     
     const imageUpload = document.getElementById('imageUpload');
-    if (imageUpload) imageUpload.addEventListener('change', handleImageUpload);
+    if (imageUpload) imageUpload.addEventListener('change', handleImageUploadAI);
     
     // Пользовательское меню
     if (elements.userBtn) elements.userBtn.addEventListener('click', toggleUserMenu);
