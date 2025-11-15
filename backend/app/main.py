@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.core.config import settings
-from app.db.migrations.session import init_db
+from app.db.session import init_db
 from app.routers import auth, users, ai
 
 @asynccontextmanager

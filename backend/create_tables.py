@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from app.db.migrations.session import init_db
+from app.db.session import init_db
 
 def create_tables():
     """

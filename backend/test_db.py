@@ -1,6 +1,6 @@
 import sys
 import os
-from app.db.migrations.session import engine
+from app.db.session import engine
 from sqlalchemy import text
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -35,7 +35,7 @@ def test_db_operations():
     Тестирует основные операции с базой данных
     """
     try:
-        from app.db.migrations.session import SessionLocal
+        from app.db.session import SessionLocal
         from app.db.models.user import User
 
         db = SessionLocal()
