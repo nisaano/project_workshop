@@ -1,9 +1,47 @@
+// Состояние приложения
+let state = {
+    folders: [
+        { 
+            name: 'История', 
+            notes: [
+                {
+                    id: 1,
+                    title: 'Древний Рим',
+                    originalText: 'Древний Рим - одна из ведущих цивилизаций Древнего мира и античности. Получила своё название по главному городу Риму, в свою очередь названному в честь легендарного основателя Ромула.',
+                    smartText: '<div class="note-content"><div class="note-section"><h4>Ключевые тезисы</h4><ul class="note-points"><li>Ведущая цивилизация Древнего мира</li><li>Название от города Рима</li><li>Легендарный основатель - Ромул</li></ul></div><div class="note-section"><h4>Основные периоды</h4><ul class="note-points"><li>Царский период (753-509 до н.э.)</li><li>Республика (509-27 до н.э.)</li><li>Империя (27 до н.э.-476 н.э.)</li></ul></div></div>',
+                    date: '2024-01-15'
+                }
+            ]
+        },
+        { 
+            name: 'Математика', 
+            notes: [
+                {
+                    id: 2,
+                    title: 'Теорема Пифагора',
+                    originalText: 'Теорема Пифагора устанавливает соотношение между сторонами прямоугольного треугольника: квадрат гипотенузы равен сумме квадратов катетов.',
+                    smartText: '<div class="note-content"><div class="note-section"><h4>Формулировка</h4><p>В прямоугольном треугольнике квадрат гипотенузы равен сумме квадратов катетов.</p></div><div class="note-section"><h4>Формула</h4><p>a² + b² = c²</p></div><div class="note-section"><h4>Применение</h4><ul class="note-points"><li>Вычисление расстояний</li><li>Решение геометрических задач</li><li>Строительство и архитектура</li></ul></div></div>',
+                    date: '2024-01-10'
+                }
+            ]
+        },
+        { 
+            name: 'Английский язык', 
+            notes: [] 
+        }
+    ],
+    currentFolder: null,
+    currentNote: null,
+    editingNote: null,
+    folderToDelete: null,
+    user: {
+        name: 'Иван Иванов',
+        email: 'ivan@example.com',
+        avatar: 'default'
+    }
+};
 
 // 
-// Элементы DOM
-let elements = {};
-
-// Загрузка данных пользователя
 function loadUserData() {
     const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     if (currentUser) {
@@ -22,9 +60,21 @@ function loadUserData() {
     }
 }
 
-// Инициализация приложения
+// Вызовите эту функцию в init()
 function init() {
     loadUserData();
+    initializeElements();
+    renderFolders();
+    updateStats();
+    setupEventListeners();
+    setupFormattingToolbar();
+}
+
+// Элементы DOM
+let elements = {};
+
+// Инициализация приложения
+function init() {
     initializeElements();
     renderFolders();
     updateStats();
