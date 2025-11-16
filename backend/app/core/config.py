@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    OPENAI_API_KEY: str = "dummy-key-for-testing"
-    OPENAI_MODEL: str = "gpt-4"
+    # OPENAI_API_KEY: str = "dummy-key-for-testing"
+    # OPENAI_MODEL: str = "gpt-4"
     LOCAL_AI_URL: str = "http://localhost:5000"
     FRONTEND_URL: str = "http://localhost:3000"
 
