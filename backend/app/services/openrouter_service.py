@@ -3,7 +3,6 @@ import asyncio
 from app.core.config import settings
 from typing import AsyncGenerator
 import base64
-import imghdr
 
 class OpenRouterService:
     def __init__(self):
@@ -83,4 +82,5 @@ class OpenRouterService:
             
         except Exception as e:
             raise Exception(f"Ошибка обработки изображения: {str(e)}")
+
 
