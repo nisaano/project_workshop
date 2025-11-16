@@ -666,20 +666,20 @@ function deleteFolder() {
 }
 
 // Генерация умного конспекта
-function generateSmartNotes() {
-    const sourceText = elements.sourceMaterial ? elements.sourceMaterial.value.trim() : '';
+//function generateSmartNotes() {
+    //const sourceText = elements.sourceMaterial ? elements.sourceMaterial.value.trim() : '';
     
-    if (!sourceText) {
-        alert('Пожалуйста, введите текст для обработки');
-        return;
-    }
+    //if (!sourceText) {
+        //alert('Пожалуйста, введите текст для обработки');
+        //return;
+    //}
     
     // Имитация работы AI
-    const smartNotes = generateMockSmartNotes(sourceText);
-    if (elements.smartNotesEditable) {
-        elements.smartNotesEditable.innerHTML = smartNotes;
-    }
-}
+    //const smartNotes = generateMockSmartNotes(sourceText);
+    //if (elements.smartNotesEditable) {
+        //elements.smartNotesEditable.innerHTML = smartNotes;
+    //}
+//}
 
 // AI-генерация конспекта
 async function generateSmartNotesAI() {
