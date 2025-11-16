@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # OPENAI_API_KEY: str = "dummy-key-for-testing"
     # OPENAI_MODEL: str = "gpt-4"
-    LOCAL_AI_URL: str = "http://localhost:5000"
+    # LOCAL_AI_URL: str = "http://localhost:5000"
     FRONTEND_URL: str = "http://localhost:3000"
 
 
@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     # Новые настройки OpenRouter
-    OPENROUTER_API_KEY: str = "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"
+    OPENROUTER_API_KEY: str
     OPENROUTER_MODEL: str = "deepseek/deepseek-chat"
     OPENROUTER_OCR_MODEL: str = "google/gemini-flash-1.5"
 
