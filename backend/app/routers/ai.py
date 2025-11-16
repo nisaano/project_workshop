@@ -18,6 +18,9 @@ async def process_text(
 ):
     """Обработка текстового запроса"""
     try:
+        if not text.strip():
+            raise HTTPException(status_code=400, detail="Текст не может быть пустым")
+            
         orchestrator = AIOrchestrator()
         result = await orchestrator.process_request({
             "type": "text",
@@ -47,15 +50,25 @@ async def process_image(
 ):
     """Обработка изображения"""
     try:
-        # Чтение и кодирование файла
+        # Проверка типа файла
+        allowed_mime_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+        if file.content_type not in allowed_mime_types:
+            raise HTTPException(status_code=400, detail="Неподдерживаемый формат изображения. Используйте JPEG, PNG, GIF или WebP.")
+        
+        # Проверка размера файла (макс 10MB)
         contents = await file.read()
+        if len(contents) > 10 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="Файл слишком большой. Максимальный размер: 10MB")
+        
+        # Кодирование в base64
         encoded_string = base64.b64encode(contents).decode('utf-8')
         
         orchestrator = AIOrchestrator()
         result = await orchestrator.process_request({
             "type": "image",
             "content": f"data:{file.content_type};base64,{encoded_string}",
-            "processing_type": processing_type
+            "processing_type": processing_type,
+            "filename": file.filename
         })
         
         if not result["success"]:
