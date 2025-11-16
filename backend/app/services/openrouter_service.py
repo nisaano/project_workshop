@@ -7,11 +7,13 @@ import imghdr
 
 class OpenRouterService:
     def __init__(self):
+        if not settings.OPENROUTER_API_KEY or settings.OPENROUTER_API_KEY == "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":
+            raise ValueError("OPENROUTER_API_KEY не настроен в .env файле")
+    
         self.client = openai.OpenAI(
-            api_key=settings.OPENROUTER_API_KEY,
+            api_key=settings.OPENROUTER_API_KEY,  # Берем из настроек
             base_url="https://openrouter.ai/api/v1"
         )
-        self.model = settings.OPENROUTER_MODEL
     
     async def process_text(self, text: str, processing_type: str) -> str:
         """Обработка текста через OpenRouter"""
@@ -81,3 +83,4 @@ class OpenRouterService:
             
         except Exception as e:
             raise Exception(f"Ошибка обработки изображения: {str(e)}")
+
