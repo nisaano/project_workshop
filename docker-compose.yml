@@ -19,8 +19,9 @@ services:
     depends_on:
       - backend
 
-  ml:
-    build: ./ml
+    ml:
+    build: ./ml_module
     container_name: ml
     ports:
       - "5000:5000"
+
