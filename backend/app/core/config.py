@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     # OPENAI_API_KEY: str = "dummy-key-for-testing"
     # OPENAI_MODEL: str = "gpt-4"
-    # LOCAL_AI_URL: str = "http://localhost:5000"
+    LOCAL_AI_URL: str = "http://localhost:5000"
     FRONTEND_URL: str = "http://localhost:3000"
 
 
