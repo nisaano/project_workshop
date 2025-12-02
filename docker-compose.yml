@@ -4,12 +4,19 @@ services:
   backend:
     build: ./backend
     container_name: backend
+    restart: always
     ports:
       - "8000:8000"
     depends_on:
-      - ml
+      - db
+      - ml_module
     environment:
-      - MODEL_URL=http://ml:5000/predict
+      DATABASE_URL: postgresql://project_user:password123@db:5432/project_db
+      SECRET_KEY: secret-key-12345
+      FRONTEND_URL: http://localhost:3000
+      MODEL_URL: http://ml_module:8001/predict
+    networks:
+      - project_network
 
   db:
     image: postgres:15
@@ -26,20 +33,6 @@ services:
     networks:
       - project_network
 
-  backend:
-    build: ./backend
-    container_name: project_backend
-    restart: always
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgresql://project_user:password123@db:5432/project_db
-      SECRET_KEY: secret-key-12345
-    ports:
-      - "8000:8000"
-    networks:
-      - project_network
-
   frontend:
     build: ./frontend
     container_name: frontend
@@ -47,10 +40,19 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - project_network
 
-    ml:
+  ml_module:
     build: ./ml_module
-    container_name: ml
+    container_name: ml_module
     ports:
-      - "5000:5000"
+      - "8001:8001"
+    networks:
+      - project_network
 
+networks:
+  project_network:
+
+volumes:
+  postgres_data:
