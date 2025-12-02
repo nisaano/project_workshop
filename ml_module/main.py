@@ -9,5 +9,5 @@ class Item(BaseModel):
 
 @app.post("/enhance")
 def enhance_text(item: Item):
-    result = enhance(item.text)
-    return {"enhanced": result}
+    enhanced = enhance(item.text)
+    return {"enhanced": enhanced}
