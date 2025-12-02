@@ -37,10 +37,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from app.routers import ml  #для связи бэка и мл (соня)
 # Подключаем роутеры
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(ai.router)
+app.include_router(ml.router) # для связи бэка и мл (соня)
 
 @app.get("/")
 async def root():
