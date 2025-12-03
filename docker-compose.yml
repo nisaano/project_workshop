@@ -34,10 +34,12 @@ services:
       - project_network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "3000:3000"
+      - "3000:80"   # <-- фиксированное значение
     depends_on:
       - backend
     networks:
