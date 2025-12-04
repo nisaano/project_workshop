@@ -40,6 +40,10 @@ class ApiService {
                 ...options,
                 headers
             });
+            console.log(`API ${endpoint}:`, {
+            status: response.status,
+            statusText: response.statusText
+            });
 
             // Если токен невалиден - разлогиниваем
             if (response.status === 401) {
@@ -200,7 +204,9 @@ async function loadUserData() {
             email: userProfile.email,
             avatar: userProfile.avatar || 'default'
         };
-
+        // обновление данных
+        localStorage.setItem('user_name', state.user.name);
+        localStorage.setItem('user_email', state.user.email);
         updateUserDisplay();
 
         // Загружаем папки пользователя
@@ -1293,12 +1299,12 @@ async function saveSettings() {
     const confirmPassword = elements.confirmPassword ? elements.confirmPassword.value : '';
     
     if (!newName) {
-        alert('Пожалуйста, введите имя пользователя');
+        alert('Введите имя пользователя');
         return;
     }
     
     if (!newEmail) {
-        alert('Пожалуйста, введите email');
+        alert('Введите email');
         return;
     }
     
@@ -1318,6 +1324,10 @@ async function saveSettings() {
         // Обновляем состояние
         state.user.name = newName;
         state.user.email = newEmail;
+
+        // Обновляем localStorage
+        localStorage.setItem('user_name', newName);
+        localStorage.setItem('user_email', newEmail);
         
         // Обновляем отображение
         updateUserDisplay();
@@ -1331,7 +1341,14 @@ async function saveSettings() {
         hideSettingsModal();
     } catch (error) {
         console.error('Ошибка сохранения настроек:', error);
-        alert('Ошибка сохранения настроек: ' + error.message);
+        // БОЛЕЕ ДЕТАЛЬНАЯ ОШИБКА
+        if (error.message.includes('400') || error.message.includes('422')) {
+            alert('Ошибка валидации. Проверьте введенные данные. Возможно, email уже используется.');
+        } else if (error.message.includes('403')) {
+            alert('Доступ запрещен. Требуется авторизация.');
+        } else {
+            alert('Ошибка сохранения настроек: ' + error.message);
+        }
     }
 }
 
@@ -1358,4 +1375,5 @@ function logout() {
 }
 
 // Запуск приложения
+
 document.addEventListener('DOMContentLoaded', init);
